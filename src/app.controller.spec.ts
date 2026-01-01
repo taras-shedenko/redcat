@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import type { Request, Response, NextFunction } from 'express';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -16,7 +17,13 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+      expect(
+        appController.getHello(
+          null as any as Request,
+          null as any as Response,
+          null as any as NextFunction,
+        ),
+      ).toBe('Hello World!');
     });
   });
 });
