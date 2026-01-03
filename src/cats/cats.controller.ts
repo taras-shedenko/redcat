@@ -5,39 +5,41 @@ import {
   Put,
   Delete,
   Param,
-  Query,
   Body,
   HttpCode,
   Header,
 } from '@nestjs/common';
-import { ListAllEntities, CreateCatDto, UpdateCatDto } from './cats.dto';
+import { CatsService } from './cats.service';
+import { CatDto } from './cats.dto';
 
 @Controller('cats')
 export class CatsController {
+  constructor(private catsService: CatsService) {}
+
   @Get()
-  getAll(@Query() query: ListAllEntities) {
-    return `This action returns all cats (limit: ${query.limit} items)`;
+  getAll() {
+    return this.catsService.getAll();
   }
 
   @Get(':id')
   getOne(@Param('id') id: string) {
-    return `This action returns a #${id} cat`;
+    return this.catsService.getOne(parseInt(id));
   }
 
   @Post()
   @Header('Cache-control', 'no-store')
-  create(@Body() createCatDto: CreateCatDto) {
-    return 'This action adds a new cat';
+  create(@Body() createCatDto: CatDto) {
+    return this.catsService.create(createCatDto);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateCatDto: UpdateCatDto) {
-    return `This action updates a #${id} cat`;
+  update(@Param('id') id: string, @Body() updateCatDto: CatDto) {
+    return this.catsService.update(parseInt(id), updateCatDto);
   }
 
   @Delete(':id')
   @HttpCode(204)
   remove(@Param('id') id: string) {
-    return `This action removes a #${id} cat`;
+    return this.catsService.remove(parseInt(id));
   }
 }

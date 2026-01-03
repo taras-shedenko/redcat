@@ -1,19 +1,7 @@
-import { CreateCatDto, UpdateCatDto, ListAllEntities } from './cats.dto';
+import { CatDto } from './cats.dto';
 
-describe('CreateCatDto', () => {
+describe('CatDto', () => {
   it('should be defined', () => {
-    expect(new CreateCatDto()).toBeDefined();
-  });
-});
-
-describe('UpdateCatDto', () => {
-  it('should be defined', () => {
-    expect(new UpdateCatDto()).toBeDefined();
-  });
-});
-
-describe('ListAllEntitiesDto', () => {
-  it('should be defined', () => {
-    expect(new ListAllEntities()).toBeDefined();
+    expect(new CatDto()).toBeDefined();
   });
 });
