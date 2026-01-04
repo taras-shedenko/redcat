@@ -1,6 +1,7 @@
 import { Controller, Get, Req, Res, Next } from '@nestjs/common';
 import type { Request, Response, NextFunction } from 'express';
 import { AppService } from './app.service';
+import { CustomServerErrorException } from './common/custom-server-error.exception';
 
 @Controller()
 export class AppController {
@@ -16,5 +17,15 @@ export class AppController {
     @Next() next: NextFunction,
   ): string {
     return this.appService.getHello();
+  }
+
+  @Get('error')
+  throwError() {
+    try {
+      throw new Error('An Error');
+    } catch (e) {
+      const description = 'Something happened';
+      throw new CustomServerErrorException(e as Error, description);
+    }
   }
 }
