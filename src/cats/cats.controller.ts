@@ -1,6 +1,7 @@
 import {
   Controller,
   UseGuards,
+  UseInterceptors,
   Get,
   Post,
   Put,
@@ -12,12 +13,14 @@ import {
 } from '@nestjs/common';
 import { Roles } from '../common/roles.decorator';
 import { RolesGuard } from '../common/roles.guard';
+import { LoggingInterceptor } from '../common/logging.interceptor';
 import { ParseIntPipe } from '../common/parse-int';
 import { CatsService } from './cats.service';
 import { CatDto } from './cats.dto';
 
 @Controller('cats')
 @UseGuards(RolesGuard)
+@UseInterceptors(LoggingInterceptor)
 export class CatsController {
   constructor(private catsService: CatsService) {}
 
