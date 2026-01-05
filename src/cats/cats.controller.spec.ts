@@ -42,7 +42,7 @@ describe('CatsController', () => {
 
   describe('getOne', () => {
     it('should call getOne service', () => {
-      controller.getOne('1');
+      controller.getOne(1);
       expect(service.getOne).toHaveBeenCalled();
     });
   });
@@ -56,14 +56,14 @@ describe('CatsController', () => {
 
   describe('update', () => {
     it('should call create service', () => {
-      controller.update('1', {} as any as CatDto);
+      controller.update(1, {} as any as CatDto);
       expect(service.update).toHaveBeenCalled();
     });
   });
 
   describe('remove', () => {
     it('should call remove service', () => {
-      controller.remove('1');
+      controller.remove(1);
       expect(service.remove).toHaveBeenCalled();
     });
   });

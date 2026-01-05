@@ -4,11 +4,12 @@ import {
   RequestMethod,
   MiddlewareConsumer,
 } from '@nestjs/common';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_PIPE, APP_FILTER } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
 import { LoggerMiddleware } from './common/logger.middleware';
+import { ValidationPipe } from './common/validation.pipe';
 import { CustomServerErrorExceptionFilter } from './common/custom-server-error.exception.filter';
 
 @Module({
@@ -16,6 +17,7 @@ import { CustomServerErrorExceptionFilter } from './common/custom-server-error.e
   controllers: [AppController],
   providers: [
     AppService,
+    { provide: APP_PIPE, useClass: ValidationPipe },
     { provide: APP_FILTER, useClass: CustomServerErrorExceptionFilter },
   ],
 })

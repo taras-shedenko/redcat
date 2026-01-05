@@ -9,6 +9,7 @@ import {
   HttpCode,
   Header,
 } from '@nestjs/common';
+import { ParseIntPipe } from '../common/parse-int';
 import { CatsService } from './cats.service';
 import { CatDto } from './cats.dto';
 
@@ -22,8 +23,8 @@ export class CatsController {
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string) {
-    return this.catsService.getOne(parseInt(id));
+  getOne(@Param('id', ParseIntPipe) id: number) {
+    return this.catsService.getOne(id);
   }
 
   @Post()
@@ -33,13 +34,13 @@ export class CatsController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateCatDto: CatDto) {
-    return this.catsService.update(parseInt(id), updateCatDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateCatDto: CatDto) {
+    return this.catsService.update(id, updateCatDto);
   }
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id: string) {
-    return this.catsService.remove(parseInt(id));
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.catsService.remove(id);
   }
 }
