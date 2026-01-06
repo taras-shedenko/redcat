@@ -15,6 +15,7 @@ import { Roles } from '../common/roles.decorator';
 import { RolesGuard } from '../common/roles.guard';
 import { LoggingInterceptor } from '../common/logging.interceptor';
 import { ParseIntPipe } from '../common/parse-int';
+import { User } from '../common/user.decorator';
 import { CatsService } from './cats.service';
 import { CatDto } from './cats.dto';
 
@@ -25,12 +26,14 @@ export class CatsController {
   constructor(private catsService: CatsService) {}
 
   @Get()
-  getAll() {
+  getAll(@User('firstName') firstName: string) {
+    console.log(firstName);
     return this.catsService.getAll();
   }
 
   @Get(':id')
-  getOne(@Param('id', ParseIntPipe) id: number) {
+  getOne(@Param('id', ParseIntPipe) id: number, @User() user: any) {
+    console.log(user);
     return this.catsService.getOne(id);
   }
 
