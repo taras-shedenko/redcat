@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/unbound-method */
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { CatsController } from './cats.controller';
 import { CatsService } from './cats.service';
 import { CatDto } from './cats.dto';
@@ -9,20 +8,9 @@ describe('CatsController', () => {
   let service: CatsService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const module = await Test.createTestingModule({
       controllers: [CatsController],
-      providers: [
-        {
-          provide: CatsService,
-          useValue: {
-            getAll: jest.fn(),
-            getOne: jest.fn(),
-            create: jest.fn(),
-            update: jest.fn(),
-            remove: jest.fn(),
-          },
-        },
-      ],
+      providers: [CatsService],
     }).compile();
 
     controller = module.get<CatsController>(CatsController);
@@ -35,36 +23,77 @@ describe('CatsController', () => {
 
   describe('getAll', () => {
     it('should call getAll service', () => {
-      controller.getAll();
-      expect(service.getAll).toHaveBeenCalled();
+      jest
+        .spyOn(service, 'getAll')
+        .mockImplementation(() => [
+          { id: 1, name: 'Name', age: 1, breed: 'Breed' },
+        ]);
+      const res = controller.getAll('name');
+      expect(res).toEqual([{ id: 1, name: 'Name', age: 1, breed: 'Breed' }]);
     });
   });
 
   describe('getOne', () => {
     it('should call getOne service', () => {
-      controller.getOne(1);
-      expect(service.getOne).toHaveBeenCalled();
+      jest.spyOn(service, 'getOne').mockImplementation(() => ({
+        id: 1,
+        name: 'Name',
+        age: 1,
+        breed: 'Breed',
+      }));
+      const res = controller.getOne(1, 'name');
+      expect(res).toEqual({
+        id: 1,
+        name: 'Name',
+        age: 1,
+        breed: 'Breed',
+      });
     });
   });
 
   describe('create', () => {
     it('should call create service', () => {
-      controller.create({} as any as CatDto);
-      expect(service.create).toHaveBeenCalled();
+      jest
+        .spyOn(service, 'create')
+        .mockImplementation((cat: CatDto) => ({ id: 1, ...cat }));
+      const res = controller.create({
+        name: 'Name',
+        age: 1,
+        breed: 'Breed',
+      });
+      expect(res).toEqual({
+        id: 1,
+        name: 'Name',
+        age: 1,
+        breed: 'Breed',
+      });
     });
   });
 
   describe('update', () => {
     it('should call create service', () => {
-      controller.update(1, {} as any as CatDto);
-      expect(service.update).toHaveBeenCalled();
+      jest
+        .spyOn(service, 'update')
+        .mockImplementation((id, catDto: CatDto) => ({ id, ...catDto }));
+      const res = controller.update(1, {
+        name: 'Name',
+        age: 1,
+        breed: 'Breed',
+      });
+      expect(res).toEqual({
+        id: 1,
+        name: 'Name',
+        age: 1,
+        breed: 'Breed',
+      });
     });
   });
 
   describe('remove', () => {
     it('should call remove service', () => {
-      controller.remove(1);
-      expect(service.remove).toHaveBeenCalled();
+      jest.spyOn(service, 'remove').mockImplementation(() => {});
+      const res = controller.remove(1);
+      expect(res).toBeUndefined();
     });
   });
 });
